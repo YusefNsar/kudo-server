@@ -15,4 +15,10 @@ export default () => ({
     password: process.env.DB_PASSWORD,
     name: process.env.DB_NAME || 'cib',
   },
+  email: {
+    host: process.env.EMAIL_HOST,
+    port: parseInt(process.env.EMAIL_PORT) || 587,
+    user: process.env.EMAIL_USER,
+    password: process.env.EMAIL_PASSWORD,
+  },
 });

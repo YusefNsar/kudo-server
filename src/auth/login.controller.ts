@@ -8,14 +8,15 @@ import {
 } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
+import { SendOtpDto } from './dto/send-otp.dto';
 
 @Controller('login')
 export class LoginController {
   constructor(private readonly loginService: LoginService) {}
 
   @Post('send-otp')
-  async sendOTP(@Body('email') email: string) {
-    return await this.loginService.sendOTP(email);
+  async sendOTP(@Body() body: SendOtpDto) {
+    return await this.loginService.sendOTP(body.email);
   }
 
   @Post('verify')

@@ -73,6 +73,9 @@ export class LoginService {
   }
 
   private generateOtp() {
-    return randomBytes(6).toString('hex').toUpperCase();
+    const OTP_SIZE = 6;
+    return randomBytes(OTP_SIZE / 2)
+      .toString('hex')
+      .toUpperCase();
   }
 }

@@ -8,6 +8,6 @@ import { EmployeeEntity, KudoEntity, MonthlyScoresEntity } from './entities';
     TypeOrmModule.forFeature([EmployeeEntity, KudoEntity, MonthlyScoresEntity]),
   ],
   providers: [EmployeeService],
-  exports: [EmployeeService],
+  exports: [EmployeeService, TypeOrmModule],
 })
 export class KudosModule {}

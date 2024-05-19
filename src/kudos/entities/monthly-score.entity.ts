@@ -6,12 +6,12 @@ export class MonthlyScoresEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => EmployeeEntity, { eager: true })
-  employee: EmployeeEntity;
-
   @Column({ type: 'int' })
   score: number;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'datetime' })
   month: Date;
+
+  @ManyToOne(() => EmployeeEntity, (employee) => employee.monthlyScores)
+  employee: EmployeeEntity;
 }

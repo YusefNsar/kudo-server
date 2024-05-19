@@ -6,6 +6,7 @@ import {
 
 import { AppModule } from './app.module';
 import config from './config';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -25,6 +26,12 @@ async function bootstrap() {
   app.setGlobalPrefix('/api/v1/', {
     exclude: ['_health'],
   });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+    }),
+  );
 
   app.enableShutdownHooks();
 

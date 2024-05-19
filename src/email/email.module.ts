@@ -10,9 +10,16 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        transport:
-          configService.get('email.transport') ||
-          'smtps://user@domain.com:pass@smtp.domain.com',
+        transport: {
+          host: configService.get('email.host'),
+          port: configService.get('email.port'),
+          ignoreTLS: false,
+          secure: false,
+          auth: {
+            user: configService.get('email.user'),
+            pass: configService.get('email.password'),
+          },
+        },
         defaults: {
           from:
             configService.get('email.from') ||
@@ -25,6 +32,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
             strict: true,
           },
         },
+        verifyTransporters: true,
       }),
     }),
   ],

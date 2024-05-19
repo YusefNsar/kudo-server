@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { MonthlyScoresEntity } from './monthly-score.entity';
 
 @Entity({ name: 'EMPLOYEES' })
 export class EmployeeEntity {
@@ -17,9 +18,12 @@ export class EmployeeEntity {
   @Column({ type: 'varchar', length: 50, nullable: true })
   department: string;
 
-  @Column({ type: 'timestamp', nullable: true })
-  lastOtp: Date;
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  lastOtp: string;
 
   @Column({ type: 'bit', default: 0 })
   blocked: number;
+
+  @OneToMany(() => MonthlyScoresEntity, (monthlyScore) => monthlyScore.employee)
+  monthlyScores: MonthlyScoresEntity[];
 }

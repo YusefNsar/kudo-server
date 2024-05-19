@@ -11,19 +11,17 @@ export class EmployeeService {
   ) {}
 
   async saveOtp(email: string, otp: string) {
-    // get emp from email
     const employee = await this.getEmployeeByEmail(email);
 
-    // if employee not found create it
     if (!employee) {
       const employee = this.employeeRepository.create({
         email,
+        lastOtp: otp,
       });
 
       await this.employeeRepository.save(employee);
     }
 
-    // save otp
     await this.employeeRepository.update({ email }, { lastOtp: otp });
   }
 

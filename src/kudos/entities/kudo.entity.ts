@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'KUDOS' })
 export class KudoEntity {
@@ -17,6 +17,11 @@ export class KudoEntity {
   @Column({ type: 'int' })
   score: number;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ type: 'datetime' })
   date: Date;
+
+  @BeforeInsert()
+  private setCreateDate(): void {
+    this.date = new Date();
+  }
 }

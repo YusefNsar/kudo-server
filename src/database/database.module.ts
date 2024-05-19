@@ -1,11 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import {
-  EmployeeEntity,
-  KudoEntity,
-  MonthlyScoresEntity,
-} from '../kudos/entities';
 // import { join } from 'path';
 
 @Module({
@@ -21,11 +16,12 @@ import {
           username: configService.get('database.user'),
           password: configService.get('database.password'),
           database: configService.get('database.name'),
-          entities: [EmployeeEntity, KudoEntity, MonthlyScoresEntity],
           options: {
             trustServerCertificate: true,
           },
           logging: true,
+          autoLoadEntities: true,
+          synchronize: true,
           // migrations: [join(__dirname, './_migrations/**/*{.ts,.js}')],
           // migrationsRun: true,
           // migrationsTableName: 'typeorm_migration',
