@@ -1,5 +1,4 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import * as jwt from 'jsonwebtoken';
 import { randomBytes } from 'crypto';
 import { JwtService } from '@nestjs/jwt';
 import { AuthPayload } from './auth.type';
@@ -16,6 +15,7 @@ export class LoginService {
 
   async sendOTP(email: string) {
     const otp = this.generateOtp();
+    console.log(otp);
     await this.employeeService.saveOtp(email, otp);
 
     await this.emailService.sendOtpEmail(email, otp);
@@ -24,8 +24,9 @@ export class LoginService {
   }
 
   async verifyOTP(email: string, otp: string) {
-    // todo: get otp from employee service
-    if (otp !== '123456') {
+    const employee = await this.employeeService.getEmployeeByEmail(email);
+
+    if (!employee || otp !== employee.lastOtp) {
       throw new HttpException(
         'OTP verification failed',
         HttpStatus.BAD_REQUEST,
@@ -33,8 +34,7 @@ export class LoginService {
     }
 
     const payload: AuthPayload = {
-      // todo: from employee service
-      email: 'yusef@email.com',
+      employee: employee,
       isAdmin: false,
     };
 
@@ -46,7 +46,7 @@ export class LoginService {
   async getUserFromToken(token: string) {
     try {
       const decodedToken = this.jwtService.verify(token);
-      // Here you can fetch user data from decodedToken and return it
+
       return decodedToken;
     } catch (error) {
       throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
@@ -58,18 +58,18 @@ export class LoginService {
     const adminUsername = process.env.ADMIN_USERNAME;
     const adminPassword = process.env.ADMIN_PASSWORD;
 
-    if (username === adminUsername && password === adminPassword) {
-      // If credentials match, generate and return token
-      const token = jwt.sign({ username }, 'admin_secret_key', {
-        expiresIn: '1h',
-      });
-      return { token };
-    } else {
+    if (username !== adminUsername || password !== adminPassword) {
       throw new HttpException(
         'Invalid username or password',
         HttpStatus.UNAUTHORIZED,
       );
     }
+
+    const payload: AuthPayload = { username, isAdmin: true };
+
+    return {
+      token: this.jwtService.sign(payload),
+    };
   }
 
   private generateOtp() {

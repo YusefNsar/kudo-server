@@ -25,6 +25,12 @@ export class EmployeeService {
     await this.employeeRepository.update({ email }, { lastOtp: otp });
   }
 
+  async getOtp(email: string) {
+    const employee = await this.getEmployeeByEmail(email);
+
+    return employee.lastOtp;
+  }
+
   async getEmployeeByEmail(email: string) {
     const employee = await this.employeeRepository.findOne({
       where: { email },

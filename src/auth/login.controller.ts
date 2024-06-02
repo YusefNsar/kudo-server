@@ -9,6 +9,7 @@ import {
 import { LoginService } from './login.service';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { SendOtpDto } from './dto/send-otp.dto';
+import { VerifyOtpDto } from './dto/verify.dto';
 
 @Controller('login')
 export class LoginController {
@@ -20,13 +21,8 @@ export class LoginController {
   }
 
   @Post('verify')
-  async verifyOTP(@Body('email') email: string, @Body('otp') otp: string) {
-    return await this.loginService.verifyOTP(email, otp);
-  }
-
-  @Post('token')
-  async getToken(@Body('token') token: string) {
-    return await this.loginService.getUserFromToken(token);
+  async verifyOTP(@Body() body: VerifyOtpDto) {
+    return await this.loginService.verifyOTP(body.email, body.otp);
   }
 
   @UseGuards(JwtAuthGuard)
