@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString, IsIn, IsOptional } from 'class-validator';
-import { departments, roles } from '../../static';
+import { departments, roles } from '../../constants';
 
 export class UpdateEmployeeDto {
   @IsOptional()

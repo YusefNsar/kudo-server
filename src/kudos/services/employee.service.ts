@@ -15,12 +15,7 @@ export class EmployeeService {
     const employee = await this.getEmployeeByEmail(email);
 
     if (!employee) {
-      const employee = this.employeeRepository.create({
-        email,
-        lastOtp: otp,
-      });
-
-      await this.employeeRepository.save(employee);
+      await this.createEmployee(email);
     }
 
     await this.employeeRepository.update({ email }, { lastOtp: otp });
@@ -32,10 +27,22 @@ export class EmployeeService {
     return employee.lastOtp;
   }
 
-  async getEmployeeByEmail(email: string) {
+  async createEmployee(email: string) {
+    const employee = this.employeeRepository.create({
+      email,
+    });
+
+    return this.employeeRepository.save(employee);
+  }
+
+  async getEmployeeByEmail(email: string, shouldExists: boolean = false) {
     const employee = await this.employeeRepository.findOne({
       where: { email },
     });
+
+    if (!employee && shouldExists) {
+      throw new HttpException('Employee not found', HttpStatus.NOT_FOUND);
+    }
 
     return employee;
   }
