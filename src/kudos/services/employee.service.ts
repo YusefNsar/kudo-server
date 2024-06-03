@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EmployeeEntity } from '../entities';
 import { Repository } from 'typeorm';
+import { UpdateEmployeeDto } from '../dto/updateEmployee.dto';
 
 @Injectable()
 export class EmployeeService {
@@ -35,6 +36,28 @@ export class EmployeeService {
     const employee = await this.employeeRepository.findOne({
       where: { email },
     });
+
+    return employee;
+  }
+
+  async updateEmployee(
+    employeeId: number,
+    updateEmployeeDto: UpdateEmployeeDto,
+  ) {
+    const isEmptyUpdateObject = Object.keys(updateEmployeeDto).length === 0;
+    if (isEmptyUpdateObject) {
+      throw new HttpException('Update object is empty', HttpStatus.BAD_REQUEST);
+    }
+
+    await this.employeeRepository.update(employeeId, updateEmployeeDto);
+
+    const employee = await this.employeeRepository.findOne({
+      where: { id: employeeId },
+    });
+
+    if (!employee) {
+      throw new HttpException('Employee not found', HttpStatus.NOT_FOUND);
+    }
 
     return employee;
   }
