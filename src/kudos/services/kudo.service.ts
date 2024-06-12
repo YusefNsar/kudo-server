@@ -54,6 +54,13 @@ export class KudoService {
     return kudo;
   }
 
+  async getAllEmployeeKudos(employeeId: string) {
+    return this.kudoRepository.find({
+      where: [{ from: employeeId }, { to: employeeId }],
+      order: { date: 'desc' },
+    });
+  }
+
   private async getFromAndToEmployees(from: string, to: string) {
     const fromEmployee = await this.employeeService.getEmployeeByEmail(
       from,
