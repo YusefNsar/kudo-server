@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EmployeeEntity } from '../entities';
 import { Repository } from 'typeorm';
-import { UpdateEmployeeDto } from '../dto/updateEmployee.dto';
+import { UpdateMyEmployeeDto } from '../dto/updateMyEmployee.dto';
 
 @Injectable()
 export class EmployeeService {
@@ -49,7 +49,7 @@ export class EmployeeService {
 
   async updateEmployee(
     employeeId: number,
-    updateEmployeeDto: UpdateEmployeeDto,
+    updateEmployeeDto: UpdateMyEmployeeDto,
   ) {
     const isEmptyUpdateObject = Object.keys(updateEmployeeDto).length === 0;
     if (isEmptyUpdateObject) {
