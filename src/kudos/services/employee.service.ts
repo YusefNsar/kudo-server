@@ -27,9 +27,10 @@ export class EmployeeService {
     return employee.lastOtp;
   }
 
-  async createEmployee(email: string) {
+  async createEmployee(email: string, employeeData?: Partial<EmployeeEntity>) {
     const employee = this.employeeRepository.create({
       email,
+      ...(employeeData || {}),
     });
 
     return this.employeeRepository.save(employee);

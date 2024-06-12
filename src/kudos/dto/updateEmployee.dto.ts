@@ -1,19 +1,19 @@
-import { IsNotEmpty, IsString, IsIn, IsOptional } from 'class-validator';
-import { departments, roles } from '../../constants';
+import {
+  IsOptional,
+  IsBoolean,
+  IsNumberString,
+  IsNotEmpty,
+} from 'class-validator';
+import { UpdateMyEmployeeDto } from './updateMyEmployee.dto';
 
-export class UpdateEmployeeDto {
+export class UpdateEmployeeDto extends UpdateMyEmployeeDto {
   @IsOptional()
-  @IsString()
+  @IsBoolean()
+  blocked: boolean;
+}
+
+export class UpdateEmployeeParamsDto {
+  @IsNumberString()
   @IsNotEmpty()
-  name: string;
-
-  @IsOptional()
-  @IsString()
-  @IsIn(departments)
-  department: string;
-
-  @IsOptional()
-  @IsString()
-  @IsIn(roles)
-  role: string;
+  employeeId: string;
 }
